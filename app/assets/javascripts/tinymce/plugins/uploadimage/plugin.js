@@ -11,6 +11,79 @@
 
       function showDialog() {
 
+        function removePixelSuffix(value) {
+          if (value) {
+            value = value.replace(/px$/, '');
+          }
+
+          return value;
+        }
+        function mergeMargins(css) {
+          if (css.margin) {
+
+            var splitMargin = css.margin.split(" ");
+
+            switch (splitMargin.length) {
+              case 1: //margin: toprightbottomleft;
+                css['margin-top'] = css['margin-top'] || splitMargin[0];
+                css['margin-right'] = css['margin-right'] || splitMargin[0];
+                css['margin-bottom'] = css['margin-bottom'] || splitMargin[0];
+                css['margin-left'] = css['margin-left'] || splitMargin[0];
+                break;
+              case 2: //margin: topbottom rightleft;
+                css['margin-top'] = css['margin-top'] || splitMargin[0];
+                css['margin-right'] = css['margin-right'] || splitMargin[1];
+                css['margin-bottom'] = css['margin-bottom'] || splitMargin[0];
+                css['margin-left'] = css['margin-left'] || splitMargin[1];
+                break;
+              case 3: //margin: top rightleft bottom;
+                css['margin-top'] = css['margin-top'] || splitMargin[0];
+                css['margin-right'] = css['margin-right'] || splitMargin[1];
+                css['margin-bottom'] = css['margin-bottom'] || splitMargin[2];
+                css['margin-left'] = css['margin-left'] || splitMargin[1];
+                break;
+              case 4: //margin: top right bottom left;
+                css['margin-top'] = css['margin-top'] || splitMargin[0];
+                css['margin-right'] = css['margin-right'] || splitMargin[1];
+                css['margin-bottom'] = css['margin-bottom'] || splitMargin[2];
+                css['margin-left'] = css['margin-left'] || splitMargin[3];
+            }
+            delete css.margin;
+          }
+          return css;
+        }
+
+        function updateStyle() {
+    			function addPixelSuffix(value) {
+    				if (value.length > 0 && /^[0-9]+$/.test(value)) {
+    					value += 'px';
+    				}
+
+    				return value;
+    			}
+
+    			if (!editor.settings.image_advtab) {
+    				return;
+    			}
+
+    			var data = win.toJSON(),
+    				css = dom.parseStyle(data.style);
+
+    			css = mergeMargins(css);
+
+    			if (data.vspace) {
+    				css['margin-top'] = css['margin-bottom'] = addPixelSuffix(data.vspace);
+    			}
+    			if (data.hspace) {
+    				css['margin-left'] = css['margin-right'] = addPixelSuffix(data.hspace);
+    			}
+    			if (data.border) {
+    				css['border-width'] = addPixelSuffix(data.border);
+    			}
+
+    			win.find('#style').value(dom.serializeStyle(dom.parseStyle(dom.serializeStyle(css))));
+    		}
+
         win = editor.windowManager.open({
           title: ed.translate('Insert an image from your computer'),
           width:  500 + parseInt(editor.getLang('uploadimage.delta_width', 0), 10),
