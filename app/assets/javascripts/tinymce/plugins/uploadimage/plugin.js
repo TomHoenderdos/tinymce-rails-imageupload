@@ -10,6 +10,7 @@
           editor = ed;
 
       function showDialog() {
+
         win = editor.windowManager.open({
           title: ed.translate('Insert an image from your computer'),
           width:  500 + parseInt(editor.getLang('uploadimage.delta_width', 0), 10),
@@ -18,6 +19,24 @@
             {type: 'iframe',  url: 'javascript:void(0)'},
             {type: 'textbox', name: 'file', label: ed.translate('Choose an image'), subtype: 'file'},
             {type: 'textbox', name: 'alt',  label: ed.translate('Image description')},
+
+
+            {type: 'form',layout: 'grid',packV: 'start',columns: 2,padding: 0,alignH: ['left', 'right'],
+								defaults: {
+									type: 'textbox',
+									maxWidth: 50,
+									onchange: updateStyle
+								},
+								items: [
+									{label: 'Vertical space', name: 'vspace'},
+									{label: 'Horizontal space', name: 'hspace'},
+									{label: 'Border', name: 'border'}
+								]
+						},
+
+
+
+
             {type: 'container', classes: 'error', html: "<p style='color: #b94a48;'>&nbsp;</p>"},
 
             // Trick TinyMCE to add a empty div that "preloads" the throbber image
