@@ -21,7 +21,7 @@
             {type: 'textbox', name: 'alt',  label: ed.translate('Image description')},
 
 
-            {type: 'form',layout: 'grid',packV: 'start',columns: 2,padding: 0,alignH: ['left', 'right'],
+            {type: 'container', layout: 'grid', packV: 'start', columns: 2, padding: 0, alignH: ['left', 'right'],
 								defaults: {
 									type: 'textbox',
 									maxWidth: 50,
